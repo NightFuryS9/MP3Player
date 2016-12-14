@@ -68,15 +68,15 @@ void UART_Init(uint16_t baudrate)
 
 /*--- UART_Receive ---*/
 
-uint8_t UART_Receive(void)
-{
-	uint8_t received_value;
+// uint8_t UART_Receive(void)
+// {
+// 	uint8_t received_value;
 
-	// wait for RI to be set
-	while(RI == 0);
+// 	// wait for RI to be set
+// 	while(RI == 0);
 
-	received_value = SBUF;
-	RI = 0;
+// 	received_value = SBUF;
+// 	RI = 0;
 
-	return received_value;
-}
+// 	return received_value;
+// }
