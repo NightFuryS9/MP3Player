@@ -16,7 +16,13 @@ void timer_2_ISR (void) interrupt Timer_2_Overflow {
 	tick_g += 10;
 	switch (traffic_state_g) {
 		case Green_state: {
-			if (SW1 == 0) {
+			if (SW2 == 0) {
+				traffic_state_g = Red_flash_state;
+				GREENLED = OFF;
+				YELLOWLED = OFF;
+				REDLED = ON;
+				WHITELED = OFF;
+			} else if (SW1 == 0) {
 				traffic_state_g = Yellow_state;
 				GREENLED = OFF;
 				YELLOWLED = ON;
@@ -38,7 +44,14 @@ void timer_2_ISR (void) interrupt Timer_2_Overflow {
 			break;
 		}
 		case Red_state: {
-			if (tick_g >= 5000) {
+			if ((SW3 == 0) && (tick_g >= 20000)) {
+				traffic_state_g = Green_state;
+				GREENLED = ON;
+				YELLOWLED = OFF;
+				REDLED = OFF;
+				WHITELED = OFF;
+				tick_g = 0;
+			} else if ((SW3 == 1) && (tick_g >= 5000)) {
 				traffic_state_g = Walk_state;
 				GREENLED = OFF;
 				YELLOWLED = OFF;
@@ -62,6 +75,21 @@ void timer_2_ISR (void) interrupt Timer_2_Overflow {
 				else
 					WHITELED = ON;
 			}
+			break;
+		}
+		case Red_flash_state: {
+			if (SW2 == 1) {
+				traffic_state_g = Red_state;
+				GREENLED = OFF;
+				YELLOWLED = OFF;
+				REDLED = ON;
+				WHITELED = OFF;
+				tick_g = 0;
+			}
+			if((tick_g%1000)>=500)
+				REDLED = OFF;
+			else
+				REDLED = ON;
 			break;
 		}
 	}
